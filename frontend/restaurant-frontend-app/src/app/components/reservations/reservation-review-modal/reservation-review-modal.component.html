@@ -1,0 +1,56 @@
+<app-modal title="Review & Confirm Reservation" (closed)="onClose()">
+  <dl class="info">
+    <div class="info-row">
+      <dt>Location</dt>
+      <dd>{{ locationName() }}</dd>
+    </div>
+    <div class="info-row">
+      <dt>Date</dt>
+      <dd>{{ date() | date: 'MMM d, y' }}</dd>
+    </div>
+    <div class="info-row">
+      <dt>Time</dt>
+      <dd>{{ timeLabel() }}</dd>
+    </div>
+    <div class="info-row">
+      <dt>Guests</dt>
+      <dd>{{ guestsLabel() }}</dd>
+    </div>
+  </dl>
+
+  <label class="price-toggle" [class.price-toggle--disabled]="guests() < 2">
+    <input
+      type="checkbox"
+      role="switch"
+      [checked]="hidePrices()"
+      [disabled]="guests() < 2"
+      (change)="onHidePricesChange($event)"
+    />
+    <span class="price-toggle__text">
+      <strong>Hide prices for guests</strong>
+      <small>
+        {{ guests() < 2 ? 'Available for reservations with 2 or more guests.' : hidePrices() ? 'Guests will not see dish prices in the pre-order.' : 'Turn on so that guests do not see dish prices in the pre-order.' }}
+      </small>
+    </span>
+  </label>
+
+  <p class="note">You can cancel up to 30 min before your reservation.</p>
+
+  <div modal-actions class="actions">
+    <button
+      type="button"
+      class="button button--secondary button--extra-large edit-btn"
+      (click)="onEdit()"
+    >
+      Edit
+    </button>
+    <button
+      type="button"
+      class="button button--primary button--extra-large confirm-btn"
+      [disabled]="submitting()"
+      (click)="onConfirm()"
+    >
+      Confirm
+    </button>
+  </div>
+</app-modal>

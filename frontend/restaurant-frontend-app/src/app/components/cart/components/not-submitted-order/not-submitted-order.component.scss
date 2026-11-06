@@ -1,0 +1,247 @@
+@use 'app/shared/styles/abstracts/colors' as color;
+
+.not-submitted-order {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid color.$neutral-200;
+  border-left: 4px solid color.$green-800;
+  border-radius: 12px;
+  background-color: color.$neutral-0;
+
+  // A booked table without dishes: lighter and dashed, so it reads as "still to fill in".
+  &--empty {
+    border-style: dashed;
+    border-left-style: solid;
+    border-left-color: color.$green-150;
+    background-color: color.$neutral-100;
+  }
+}
+
+.table-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.table-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.table-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: color.$neutral-900;
+}
+
+.table-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: color.$green-100;
+  color: color.$green-800;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &--muted {
+    background-color: color.$neutral-200;
+    color: color.$neutral-700;
+  }
+}
+
+.empty-table,
+.empty-table-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.order {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.order-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.order-item-dish {
+  display: flex;
+  flex-direction: row;
+  padding: 24px;
+  gap: 16px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px 4px rgba(194, 194, 194, 0.5);
+}
+
+.dish-image {
+  min-width: 96px;
+  height: 96px;
+  border-radius: 400px;
+  box-shadow: 0 0 10px 4px rgba(194, 194, 194, 0.5);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.dish-name {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quantity {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+
+.total {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 16px;
+}
+
+.body {
+  font-size: 14px;
+  letter-spacing: 0;
+  font-weight: 300;
+  line-height: 24px;
+}
+
+.body-bold {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+.caption {
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+.readiness {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.readiness-info,
+.section-heading,
+.subtotal,
+.guest-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.section-heading {
+  justify-content: flex-start;
+}
+
+.readiness-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: color.$green-800;
+}
+
+.readiness-track {
+  height: 6px;
+  border-radius: 999px;
+  background-color: color.$neutral-200;
+  overflow: hidden;
+}
+
+.readiness-fill {
+  height: 100%;
+  background-color: color.$green-800;
+}
+
+.owner-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: color.$green-100;
+  color: color.$green-800;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.guest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guest-row {
+  padding: 12px;
+  border: 1px solid color.$neutral-200;
+  border-radius: 8px;
+}
+
+.guest-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.guest-status {
+  font-size: 12px;
+  color: color.$orange-600;
+
+  &--ready {
+    color: color.$green-800;
+  }
+}
+
+.order-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding-top: 16px;
+  border-top: 1px solid color.$neutral-200;
+}
+
+.order-footer .total {
+  width: 100%;
+  justify-content: space-between;
+}

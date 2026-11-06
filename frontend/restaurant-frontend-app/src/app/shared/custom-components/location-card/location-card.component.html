@@ -1,0 +1,68 @@
+<div class="location-card" [style.max-width]="maxWidth() || null">
+  <a
+    [routerLink]="'/locations/' + location().id"
+    routerLinkActive="router-link-active"
+    class="location-image-link"
+    [attr.aria-label]="'View ' + location().address"
+  >
+    <img
+      [src]="location().imageUrl"
+      [alt]="'Restaurant at ' + location().address"
+      class="location-image"
+    />
+  </a>
+
+  <div class="location-text-block">
+    <a [routerLink]="'/locations/' + location().id" class="location-info">
+      <img
+        src="assets/svg/address.svg"
+        alt=""
+        aria-hidden="true"
+        class="location-icon"
+      />
+      <span class="location-text">
+        {{ location().address }}
+      </span>
+    </a>
+
+    <div class="tables-info">
+      <div class="capacity">
+        <img
+          src="assets/svg/table.svg"
+          alt=""
+          aria-hidden="true"
+          class="table-icon"
+        />
+        <span class="value">
+          {{ location().totalCapacity }}
+        </span>
+        <span class="label">
+          {{ tablesLabel }}
+        </span>
+      </div>
+
+      <div class="occupancy">
+        <span class="label">Daily occupancy: </span>
+        <span class="value">
+          {{ location().averageOccupancy }}
+        </span>
+      </div>
+    </div>
+  
+    <div class="card-actions">
+      <a
+        [routerLink]="['/tables']"
+        [queryParams]="{ locationId: location().id, autoSelect: 'true' }"
+        class="button button--primary button--small"
+      >
+        Book
+      </a>
+      <a
+        [routerLink]="'/locations/' + location().id"
+        class="button button--secondary button--small"
+      >
+        View
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,249 @@
+<div
+  class="not-submitted-order"
+  [class.not-submitted-order--empty]="isEmpty()"
+>
+  <div class="table-header">
+    <div class="table-title">
+      <span class="table-name">{{ order().tableName || 'Table' }}</span>
+
+      @if (order().isGroupOrder) {
+        <span class="table-badge">Group</span>
+      }
+
+      @if (isEmpty()) {
+        <span class="table-badge table-badge--muted">No dishes yet</span>
+      }
+    </div>
+
+    <span class="caption">
+      {{ order().reservationAddress }}@if (scheduleLabel()) {, {{ scheduleLabel() }}}
+    </span>
+  </div>
+
+  @if (isEmpty()) {
+    <div class="empty-table">
+      @if (preOrderClosed()) {
+        <span class="caption">Pre-order is closed: the reservation starts in less than 30 minutes.</span>
+      } @else {
+        <span class="caption">
+          This table is booked, but no dishes have been added to the pre-order yet.
+        </span>
+      }
+
+      <div class="empty-table-actions">
+        <button
+          type="button"
+          class="button button--secondary button--large"
+          [disabled]="preOrderClosed()"
+          (click)="addDishToOrder()"
+        >
+          Add dish
+        </button>
+
+        @if (order().isGroupOrder) {
+          <button
+            type="button"
+            class="button button--tertiary button--large"
+            (click)="openGroupOrder(order().reservationId)"
+          >
+            View group pre-order
+          </button>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="content">
+      <div class="order">
+        @if (preOrderClosed()) {
+          <span class="caption">Pre-order is closed: changes are allowed only up to 30 minutes before the reservation.</span>
+        }
+
+        @if (order().isGroupOrder) {
+          <div class="readiness">
+            <div class="readiness-info">
+              <span class="caption">Group Pre-order Readiness</span>
+              <span class="readiness-count">
+                {{ order().groupState?.orderedGuests ?? 0 }} of {{ order().groupState?.totalGuests ?? 2 }} guests ordered
+              </span>
+            </div>
+            <div class="readiness-track">
+              <div class="readiness-fill" [style.width.%]="readinessPercent()"></div>
+            </div>
+          </div>
+
+          <div class="section-heading">
+            <span class="body-bold">My Pre-Order</span>
+            <span class="owner-badge">Owner</span>
+          </div>
+        }
+
+        <div class="order-item">
+          @for (item of order().orderItems; track item.dish.id) {
+            <div class="order-item-dish">
+              <img
+                class="dish-image"
+                [src]="item.dish.imageUrl || 'assets/img/dish.png'"
+                [alt]="item.dish.name"
+                width="96"
+                height="96"
+              />
+
+              <div class="container">
+                <div class="details">
+                  <div class="dish-name">
+                    <span class="body-bold">{{ item.dish.name }}</span>
+                    <span class="caption">Expected ready time – 10 minutes</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="icon-button icon-button--small"
+                    [attr.aria-label]="'Remove ' + item.dish.name"
+                    [disabled]="preOrderClosed()"
+                    (click)="removeDishFromOrder(item.dish.id)"
+                  >
+                    <img
+                      src="assets/svg/trash.svg"
+                      alt=""
+                      aria-hidden="true"
+                      width="24"
+                      height="24"
+                    />
+                  </button>
+                </div>
+
+                <div class="quantity">
+                  <div class="quantity-buttons">
+                    <button
+                      type="button"
+                      class="icon-button icon-button--small"
+                      aria-label="Decrease quantity"
+                      [disabled]="item.quantity <= 1 || preOrderClosed()"
+                      (click)="decrementItemQuantity(item.dish.id)"
+                    >
+                      <img
+                        src="assets/svg/minus-green.svg"
+                        alt=""
+                        aria-hidden="true"
+                        width="24"
+                        height="24"
+                      />
+                    </button>
+
+                    <span class="value">{{ item.quantity }}</span>
+
+                    <button
+                      type="button"
+                      class="icon-button icon-button--small"
+                      aria-label="Increase quantity"
+                      [disabled]="preOrderClosed()"
+                      (click)="incrementItemQuantity(item.dish.id)"
+                    >
+                      <img
+                        src="assets/svg/plus-green.svg"
+                        alt=""
+                        aria-hidden="true"
+                        width="24"
+                        height="24"
+                      />
+                    </button>
+                  </div>
+
+                  <span class="body-bold">
+                    {{ item.dish.price * item.quantity | currency }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          } @empty {
+            <span class="caption">You haven’t added any dishes for yourself yet.</span>
+          }
+
+          <button
+            type="button"
+            class="button button--tertiary button--large add-dish-btn"
+            [disabled]="preOrderClosed()"
+            (click)="addDishToOrder()"
+          >
+            <img
+              src="assets/svg/plus-green.svg"
+              alt=""
+              aria-hidden="true"
+              width="24"
+              height="24"
+            />
+
+            Add dish
+          </button>
+        </div>
+
+        @if (order().isGroupOrder) {
+          <div class="section-heading">
+            <span class="body-bold">Guests' Pre-Orders ({{ order().groupState?.guests?.length ?? 0 }})</span>
+          </div>
+
+          <ul class="guest-list">
+            @for (guest of order().groupState?.guests ?? []; track guest.id) {
+              <li class="guest-row">
+                <div class="guest-info">
+                  <span class="body-bold">{{ guest.name }}</span>
+                  <span class="guest-status" [class.guest-status--ready]="guest.isSubmitted">
+                    {{ guest.isSubmitted ? 'Ready' : 'Choosing dishes…' }}
+                  </span>
+                </div>
+                <span class="body-bold">{{ guest.total | currency }}</span>
+              </li>
+            } @empty {
+              <li class="caption">Guests can choose dishes using the invite link.</li>
+            }
+          </ul>
+
+          <button
+            type="button"
+            class="button button--tertiary button--large"
+            (click)="openGroupOrder(order().reservationId)"
+          >
+            View group pre-order
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="order-footer">
+      @if (order().isGroupOrder) {
+        <div class="subtotal">
+          <span class="caption">My subtotal</span>
+          <span class="body-bold">{{ customerTotalPrice() | currency }}</span>
+        </div>
+        <div class="subtotal">
+          <span class="caption">Guests' subtotal (ready)</span>
+          <span class="body-bold">{{ groupReadyTotal() | currency }}</span>
+        </div>
+      }
+
+      <div class="total">
+        <span class="body-bold">Grand Total</span>
+        <h2>{{ tableGrandTotal() | currency }}</h2>
+      </div>
+
+      @if (order().isGroupOrder) {
+        <button
+          type="button"
+          class="button button--primary button--large submit-btn"
+          (click)="openGroupOrder(order().reservationId)"
+        >
+          Review &amp; Submit • {{ tableGrandTotal() | currency }}
+        </button>
+      } @else {
+        <button
+          type="button"
+          class="button button--primary button--large submit-btn"
+          [disabled]="preOrderClosed()"
+          (click)="submit()"
+        >
+          Submit Pre-Order • {{ tableGrandTotal() | currency }}
+        </button>
+      }
+    </div>
+  }
+</div>

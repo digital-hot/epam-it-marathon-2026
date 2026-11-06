@@ -1,0 +1,75 @@
+@use 'app/shared/styles/abstracts/colors' as color;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.submitted-order-item {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: color.$neutral-0;
+  border: 1.5px solid color.$neutral-200;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.actions {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 16px;
+}
+
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .submitted-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .status-pill--submitted {
+    background: color.$green-100;
+    color: color.$green-800;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  .body-meta {
+    font-size: 13px;
+    color: color.$neutral-600;
+  }
+}
+
+.order-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.body-bold {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+.body {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
